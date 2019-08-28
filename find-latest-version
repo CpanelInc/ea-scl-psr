@@ -4,41 +4,92 @@
 # copyright@cpanel.net                                         http://cpanel.net
 # This code is subject to the cPanel license. Unauthorized copying is prohibited
 
-package ea_repo_name_goes_here::find_latest_version;
+package scl_psr::find_latest_version;
 
 use strict;
 use warnings;
 
+use Cpanel::JSON::XS;
+
 use lib "../ea-tools/lib/ea4_tool";    # assumes ea-tools is checked out next to this repo
 use ea4_tool::util ();
-
-ea4_tool::util::find_latest_version(\&_get_required, \&_add_sum) if !caller();
 
 ###############
 #### helpers ##
 ###############
 
+my $tarball = 'ihatedoingthis.tar.gz';
+
+sub __ugh_get_tarballname_from_tarball {
+    my ($tarball_url) = @_;
+
+    # This is absolutely disgusting that I have to do this.
+    #
+    # In order to create the RPM the name of the tarball MUST be
+    # the same as what it says is the top directory is. so in order
+    # to get that I have no choice but to download it and splode it
+    #
+
+    system( 'wget', '-q', '-O', $tarball, $tarball_url );
+    open my $fh, '-|', 'tar', 'tzf', $tarball or die "Cannot open tar file";
+    my $sha;
+    while (<$fh>) {
+        chomp;
+        if (m{jbboehr-php-psr-(.+)/$}) {
+            $sha = $1;
+            last;
+        }
+
+    }
+    close $fh;
+
+    unlink $tarball;
+
+    return $sha;
+}
+
 sub _get_required {
-   my ($http) = @_;
+    my ($http) = @_;
 
-   my ( $version, $url, $name );
+    my ( $version, $url, $name );
 
-   my $res  = $http->get("https://repo.example.org/releases");
-   # get $version, $url, $name from $res (and possibly multiple HTTP calls)
-   # die if there is a problem determining any of those values
+    my $res = $http->get("https://api.github.com/repos/jbboehr/php-psr/tags");
 
-   return ( $version, $url, $name );
+    my $tag_refs = Cpanel::JSON::Load( $res->content );
+    my $tag;
+
+    foreach my $tag_ref ( @{$tag_refs} ) {
+        if ( !defined $tag ) {
+            $tag = $tag_ref;
+            next;
+        }
+
+        if ( $tag_ref->{name} gt $tag->{name} ) {
+            $tag = $tag_ref;
+            next;
+        }
+    }
+
+    die "Cannot find latest version" if !defined $tag;
+
+    my $sha = __ugh_get_tarballname_from_tarball( $tag->{tarball_url} );
+
+    $version = $tag->{'name'};
+    $name    = "jbboehr-php-psr-$sha.tar.gz";
+    $url     = $tag->{'tarball_url'};
+
+    return ( $version, $url, $name );
 }
 
 sub _add_sum {
-    my ($http, $hr) = @_;
+    my ( $http, $hr ) = @_;
 
-    # Optional: Set $hr->{tarball}{sum}{hex} and $hr->{tarball}{sum}{type} (sha256, sha1, md5, anythign Digest.pm can handle)
-    #           die if there is a problem determining either of those values
-    # otherwise this is a no-op
+    # I could not find a way to get the sum
 
     return;
 }
+
+ea4_tool::util::find_latest_version( \&_get_required, \&_add_sum ) if !caller();
 
 __END__
 
@@ -46,4 +97,5 @@ __END__
 
 =head1 README
 
-… explain nuances of fetching the latest-info for this repo here for future us …
+This is a Github project.  The latest version is listed as a tag in the project.
+
