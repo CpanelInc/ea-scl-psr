@@ -51,7 +51,7 @@ sub __ugh_get_tarballname_from_tarball {
 sub _get_required {
     my ($http) = @_;
 
-    my ( $version, $url, $name );
+    my ( $sha, $version, $url, $name );
 
     my $res = $http->get("https://api.github.com/repos/jbboehr/php-psr/tags");
 
@@ -72,10 +72,9 @@ sub _get_required {
 
     die "Cannot find latest version" if !defined $tag;
 
-    my $sha = __ugh_get_tarballname_from_tarball( $tag->{tarball_url} );
-
+    $sha     = substr $tag->{commit}{sha}, 0, 7;
     $version = $tag->{'name'};
-    $name    = "jbboehr-php-psr-$sha.tar.gz";
+    $name    = "jbboehr-php-psr-$version-0-g$sha.tar.gz";
     $url     = $tag->{'tarball_url'};
 
     return ( $version, $url, $name );
