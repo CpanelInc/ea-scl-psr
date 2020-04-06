@@ -35,7 +35,7 @@ Vendor:  cPanel, Inc.
 Summary: This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
 Version: 1.0.0
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4572 for more details
-%define release_prefix 1
+%define release_prefix 2
 Release: %{release_prefix}%{?dist}.cpanel
 License: PHP
 Group:   Development/Languages
@@ -97,6 +97,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/%{_scl_root}/etc/php.d/20-psr.ini
 %config(noreplace) %attr(644,root,root) %{_scl_root}/etc/php.d/20-psr.ini
 
 %changelog
+* Mon Apr 06 2020 Julian Brown <julian.brown@cpanel.net> - 1.0.0-2
+- ZC-6345: Add PHP74
+
 * Wed Mar 04 2020 Tim Mullin <tim@cpanel.net> - 1.0.0-1
 - EA-8903: Update to v1.0.0
 
