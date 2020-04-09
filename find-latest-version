@@ -74,6 +74,7 @@ sub _get_required {
 
     $sha     = substr $tag->{commit}{sha}, 0, 7;
     $version = $tag->{'name'};
+    $version =~ s/^v//;
     $name    = "jbboehr-php-psr-$version-0-g$sha.tar.gz";
     $url     = $tag->{'tarball_url'};
 
