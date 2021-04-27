@@ -33,7 +33,7 @@
 Name:    %{?scl_prefix}php-psr
 Vendor:  cPanel, Inc.
 Summary: This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
-Version: 1.0.1
+Version: 1.1.0
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4572 for more details
 %define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
@@ -44,7 +44,7 @@ URL: https://github.com/jbboehr/php-psr
 #### https://fedoraproject.org/wiki/Packaging:SourceURL?rd=Packaging/SourceURL#Git_Hosting_Services
 #### Source: https://github.com/phalcon/cphalcon/archive/v%{version}.tar.gz
 #### does not work :(
-Source: jbboehr-php-psr-1.0.1-0-g43e21cc.tar.gz
+Source: jbboehr-php-psr-1.1.0-0-gd900382.tar.gz
 Source1: psr.ini
 BuildRequires: scl-utils-build
 BuildRequires: %{?scl_prefix}scldevel
@@ -66,7 +66,7 @@ Requires:      %{scl} %{?scl_prefix}php-cli
 This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
 
 %prep
-%setup -n jbboehr-php-psr-bbb2a9d
+%setup -n jbboehr-php-psr-3d95522
 #### ^^^ [GitHub]
 
 %build
@@ -97,6 +97,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/%{_scl_root}/etc/php.d/20-psr.ini
 %config(noreplace) %attr(644,root,root) %{_scl_root}/etc/php.d/20-psr.ini
 
 %changelog
+* Fri Apr 23 2021 Cory McIntire <cory@cpanel.net> - 1.1.0-1
+- EA-9712: Update scl-psr from v1.0.1 to v1.1.0
+
 * Sun Nov 29 2020 Cory McIntire <cory@cpanel.net> - 1.0.1-1
 - EA-9452: Update scl-psr from v1.0.0 to v1.0.1
 
