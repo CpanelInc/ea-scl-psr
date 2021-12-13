@@ -33,7 +33,7 @@
 Name:    %{?scl_prefix}php-psr
 Vendor:  cPanel, Inc.
 Summary: This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
-Version: 1.1.0
+Version: 1.2.0
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4572 for more details
 %define release_prefix 1
 Release: %{release_prefix}%{?dist}.cpanel
@@ -97,6 +97,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/%{_scl_root}/etc/php.d/20-psr.ini
 %config(noreplace) %attr(644,root,root) %{_scl_root}/etc/php.d/20-psr.ini
 
 %changelog
+* Mon Dec 13 2021 Cory McIntire <cory@cpanel.net> - 1.2.0-1
+- EA-10351: Update scl-psr from v1.1.0 to v1.2.0
+
 * Fri Apr 23 2021 Cory McIntire <cory@cpanel.net> - 1.1.0-1
 - EA-9712: Update scl-psr from v1.0.1 to v1.1.0
 
