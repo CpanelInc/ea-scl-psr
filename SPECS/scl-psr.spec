@@ -44,7 +44,7 @@ URL: https://github.com/jbboehr/php-psr
 #### https://fedoraproject.org/wiki/Packaging:SourceURL?rd=Packaging/SourceURL#Git_Hosting_Services
 #### Source: https://github.com/phalcon/cphalcon/archive/v%{version}.tar.gz
 #### does not work :(
-Source: jbboehr-php-psr-1.1.0-0-gd900382.tar.gz
+Source: jbboehr-php-psr-1.2.0-0-ge068927.tar.gz
 Source1: psr.ini
 BuildRequires: scl-utils-build
 BuildRequires: %{?scl_prefix}scldevel
@@ -66,7 +66,7 @@ Requires:      %{scl} %{?scl_prefix}php-cli
 This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
 
 %prep
-%setup -n jbboehr-php-psr-3d95522
+%setup -n jbboehr-php-psr-60193fd
 #### ^^^ [GitHub]
 
 %build
