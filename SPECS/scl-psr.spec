@@ -1,5 +1,3 @@
-%define debug_package %{nil}
-
 %{?scl:%global _scl_prefix /opt/cpanel}
 %{!?scl:%global pkg_name %{name}}
 
@@ -35,7 +33,7 @@ Vendor:  cPanel, Inc.
 Summary: This PHP extension provides the interfaces from the PSR standards as established by the PHP-FIG group.
 Version: 1.2.0
 # Doing release_prefix this way for Release allows for OBS-proof versioning, See EA-4572 for more details
-%define release_prefix 1
+%define release_prefix 2
 Release: %{release_prefix}%{?dist}.cpanel
 License: PHP
 Group:   Development/Languages
@@ -97,6 +95,9 @@ install %{SOURCE1} $RPM_BUILD_ROOT/%{_scl_root}/etc/php.d/20-psr.ini
 %config(noreplace) %attr(644,root,root) %{_scl_root}/etc/php.d/20-psr.ini
 
 %changelog
+* Wed May 10 2023 Brian Mendoza <brian.mendoza@cpanel.net> - 1.2.0-2
+- ZC-10936: Clean up Makefile and remove debug-package-nil
+
 * Mon Dec 13 2021 Cory McIntire <cory@cpanel.net> - 1.2.0-1
 - EA-10351: Update scl-psr from v1.1.0 to v1.2.0
 
