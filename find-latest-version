@@ -9,8 +9,6 @@ package scl_psr::find_latest_version;
 use strict;
 use warnings;
 
-use Cpanel::JSON::XS;
-
 use lib "../ea-tools/lib/ea4_tool";    # assumes ea-tools is checked out next to this repo
 use ea4_tool::util ();
 
@@ -54,8 +52,11 @@ sub _get_required {
     my ( $sha, $version, $url, $name );
 
     my $res = $http->get("https://api.github.com/repos/jbboehr/php-psr/tags");
+    if ( !$res->{success} ) {
+        die "Could not GET php-psr info from github ($res->{status} $res->{reason})\n\t Throttled? `curl -I https://api.github.com/rate_limit 2>&1 | grep ^X-RateLimit`\n";
+    }
 
-    my $tag_refs = Cpanel::JSON::Load( $res->content );
+    my $tag_refs = ea4_tool::util::json2ref( $res->{content} );
     my $tag;
 
     foreach my $tag_ref ( @{$tag_refs} ) {
@@ -75,8 +76,8 @@ sub _get_required {
     $sha     = substr $tag->{commit}{sha}, 0, 7;
     $version = $tag->{'name'};
     $version =~ s/^v//;
-    $name    = "jbboehr-php-psr-$version-0-g$sha.tar.gz";
-    $url     = $tag->{'tarball_url'};
+    $name = "jbboehr-php-psr-$version-0-g$sha.tar.gz";
+    $url  = $tag->{'tarball_url'};
 
     return ( $version, $url, $name );
 }
