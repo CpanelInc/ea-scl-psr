@@ -52,6 +52,9 @@ sub _get_required {
     my ( $sha, $version, $url, $name );
 
     my $res = $http->get("https://api.github.com/repos/jbboehr/php-psr/tags");
+    if ( !$res->{success} ) {
+        die "Could not GET php-psr info from github ($res->{status} $res->{reason})\n\t Throttled? `curl -I https://api.github.com/rate_limit 2>&1 | grep ^X-RateLimit`\n";
+    }
 
     my $tag_refs = ea4_tool::util::json2ref( $res->{content} );
     my $tag;
